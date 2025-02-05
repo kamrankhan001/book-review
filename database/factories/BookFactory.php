@@ -16,12 +16,14 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
+        $bookCovers = ['book1.jpg', 'book2.jpg', 'book3.jpg', 'book4.jpg', 'book5.jpg', 'book6.jpg'];
+
         return [
             'title' => $this->faker->sentence(3),
             'author' => $this->faker->name,
-            'cover_image' => $this->faker->imageUrl(200, 300, 'books', true), // Random book image
-            'description' => $this->faker->paragraph,
-            'user_id' => \App\Models\User::factory(), // Assign a user
+            'cover_image' => 'books/covers/' . $bookCovers[array_rand($bookCovers)],
+            'description' => $this->faker->words(15, true),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

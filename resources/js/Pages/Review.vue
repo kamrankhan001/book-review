@@ -2,13 +2,17 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { ref } from 'vue';
 
-const book = ref({
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    cover: "/imgs/book1.jpg", // Replace with actual book cover URL
-    description:
-        "The Great Gatsby is a 1925 novel by American writer F. Scott Fitzgerald. Set in the Jazz Age on Long Island, the novel depicts narrator Nick Carraway's interactions with mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy Buchanan.",
+
+// Props to accept the book data
+const props = defineProps({
+    book: {
+        type: Object,
+        required: true,
+    },
 });
+
+
+const book = ref(props.book);
 
 const reviews = ref([
     {
@@ -77,7 +81,7 @@ const generateStarRating = (rating) => {
             <div class="flex flex-col md:flex-row">
                 <!-- Book Cover -->
                 <div class="md:w-1/4 flex justify-center">
-                    <img :src="book.cover" alt="Book Cover" class="w-48 h-64 object-cover rounded-lg shadow-md" />
+                    <img :src="'/storage/'+book.cover_image" alt="Book Cover" class="w-48 h-64 object-cover rounded-lg shadow-md" />
                 </div>
                 <!-- Book Info -->
                 <div class="md:w-3/4 md:pl-8 mt-6 md:mt-0">
