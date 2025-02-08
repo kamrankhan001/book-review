@@ -1,5 +1,7 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import AddReview from './AddReview.vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 
@@ -14,51 +16,6 @@ const props = defineProps({
 
 const book = ref(props.book);
 
-const reviews = ref([
-    {
-        id: 1,
-        user: {
-            name: "John Doe",
-            image: "/person.png",
-        },
-        published_date: "2023-10-01",
-        rating: 4.5,
-        review:
-            "A timeless classic! The characters are well-developed, and the story is captivating.",
-    },
-    {
-        id: 2,
-        user: {
-            name: "Jane Smith",
-            image: "/person.png",
-        },
-        published_date: "2023-09-25",
-        rating: 5,
-        review:
-            "Absolutely loved it! The writing is beautiful, and the themes are still relevant today.",
-    },
-    {
-        id: 3,
-        user: {
-            name: "Alice Johnson",
-            image: "/person.png",
-        },
-        published_date: "2023-09-15",
-        rating: 3.5,
-        review:
-            "A good read, but I found some parts a bit slow. Still worth it for the ending!",
-    },
-]);
-
-// Function to format date
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-}
 
 // Function to generate star rating display
 const generateStarRating = (rating) => {
@@ -93,17 +50,28 @@ const generateStarRating = (rating) => {
         </div>
 
         <!-- Reviews Section -->
+
+        <div v-if="usePage().props.auth.user">
+            <AddReview :bookId="book.id"/>
+        </div>
+
+        <div v-else>
+            <div class="bg-yellow-300 border rounded-lg p-6 mb-6">
+                <p class="text-gray-700">Please login to add a review.</p>
+            </div>
+        </div>
+
         <div class="bg-white border rounded-lg p-6">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Reviews</h2>
             <!-- Review List -->
-            <div v-for="review in reviews" :key="review.id" class="border-b border-gray-200 pb-6 mb-6">
+            <div v-for="review in book.reviews" :key="review.id" class="border-b border-gray-200 pb-6 mb-6">
                 <div class="flex items-center">
                     <!-- Reviewer Image -->
-                    <img :src="review.user.image" alt="User Image" class="w-10 h-10 rounded-full object-cover" />
+                    <img src="/person.png" alt="User Image" class="w-10 h-10 rounded-full object-cover" />
                     <!-- Reviewer Name and Date -->
                     <div class="ml-4">
                         <p class="text-gray-900 font-semibold">{{ review.user.name }}</p>
-                        <p class="text-gray-500 text-sm">{{ formatDate(review.published_date) }}</p>
+                        <p class="text-gray-500 text-sm">{{review.created_at}}</p>
                     </div>
                 </div>
                 <!-- Rating -->

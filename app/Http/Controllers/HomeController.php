@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Book;
-
+use App\Http\Requests\ReviewRequest;
+use App\Models\{Book, Review};
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
         $books = Book::where(function ($query) use ($request) {
-            $query->where('title', 'like', '%' . $request->search . '%')
-                ->orWhere('author', 'like', '%' . $request->search . '%');
+            $query->where('title', 'like', '%' . $request->search . '%')->orWhere('author', 'like', '%' . $request->search . '%');
         })
             ->latest()
             ->paginate(9)
@@ -26,8 +25,21 @@ class HomeController extends Controller
 
     public function review(Book $book)
     {
-        return inertia('Review' , [
-            'book' => $book
+        return inertia('Review', [
+            'book' => $book->load([
+                'reviews' => function ($query) {
+                    $query->latest();
+                },
+                'reviews.user',
+            ]),
         ]);
+    }
+
+    public function storeReview(ReviewRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        Review::create($validatedData);
+        return redirect()->back()->with('message', 'Review added successfully');
     }
 }

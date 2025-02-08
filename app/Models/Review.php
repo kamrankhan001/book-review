@@ -4,22 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 
-
-class Book extends Model
+class Review extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'title',
-        'author',
-        'cover_image',
-        'description',
         'user_id',
+        'book_id',
+        'review',
+        'rating',
     ];
 
     public function user(): BelongsTo
@@ -27,8 +21,9 @@ class Book extends Model
         return $this->belongsTo(related: User::class);
     }
 
-    public function reviews(): HasMany {
-        return $this->hasMany(related: Review::class);
+    public function book(): BelongsTo
+    {
+        return $this->belongsTo(related: Book::class);
     }
 
     protected function createdAt(): Attribute

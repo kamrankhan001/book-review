@@ -14,6 +14,8 @@ Route::get('/book/review/{book}', [HomeController::class, 'review'])->name('book
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::post('/book/review/store', [HomeController::class, 'storeReview'])->name('book-review.store');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('/books', [BookController::class, 'store'])->name('books.store');

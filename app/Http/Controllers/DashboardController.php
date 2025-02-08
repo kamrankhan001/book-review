@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Book;
 
 class DashboardController extends Controller
 {
