@@ -4,7 +4,7 @@ import ListBook from './book/ListBook.vue';
 import ListReview from './review/ListReview.vue';
 
 import { Head } from '@inertiajs/vue3';
-import { onMounted, ref } from 'vue'
+import { onMounted, provide } from 'vue'
 import { initTabs } from 'flowbite'
 
 // Define props to accept the books data
@@ -13,8 +13,13 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    reviews: {
+        type: Object,
+        required: true,
+    },
 });
 
+provide('books', props.books);
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -85,7 +90,7 @@ const updateBook = (updatedBook) => {
                 </div>
                 <div class="hidden dark:bg-gray-800" id="reviews" role="tabpanel"
                     aria-labelledby="reviews-tab">
-                    <ListReview/>
+                    <ListReview :reviews="props.reviews"/>
 
                 </div>
             </div>

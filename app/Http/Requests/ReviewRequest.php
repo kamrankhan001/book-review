@@ -25,7 +25,7 @@ class ReviewRequest extends FormRequest
             'book_id' => 'required|exists:books,id',
             'user_id' => 'required|exists:users,id',
             'review' => 'required|string|max:2000',
-            'rating' => 'required|decimal:1.0,5.0|between:1,5',
+            'rating' => 'required|numeric|between:1,5|regex:/^\d(\.\d)?$/',
         ];
     }
 }

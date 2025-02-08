@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\{HomeController,DashboardController,ProfileController, BookController,ReviewController};
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -14,7 +11,10 @@ Route::get('/book/review/{book}', [HomeController::class, 'review'])->name('book
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::post('/book/review/store', [HomeController::class, 'storeReview'])->name('book-review.store');
+    Route::post('/book/review/store', [ReviewController::class, 'store'])->name('book-review.store');
+    Route::put('/book/review/edit/{review}', [ReviewController::class, 'update'])->name('book-review.update');
+    Route::delete('/book/review/edit/{review}', [ReviewController::class, 'destroy'])->name('book-review.destroy');
+
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

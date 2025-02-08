@@ -18,9 +18,16 @@ class DashboardController extends Controller
             ->paginate(5)
             ->withQueryString(); // Ensures pagination works with search
 
+        $reviews = auth()
+            ->user()
+            ->reviews()
+            ->latest()
+            ->get();
+
         return inertia('Dashboard', [
             'books' => $books,
             'filters' => $request->only('search'), // Pass search input to Vue
+            'reviews' => $reviews->load('book'),
         ]);
     }
 }

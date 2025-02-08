@@ -35,11 +35,4 @@ class HomeController extends Controller
         ]);
     }
 
-    public function storeReview(ReviewRequest $request)
-    {
-        $validatedData = $request->validated();
-
-        Review::create($validatedData);
-        return redirect()->back()->with('message', 'Review added successfully');
-    }
 }
