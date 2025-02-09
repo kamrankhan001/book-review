@@ -81,7 +81,7 @@ const searchBook = () => {
             <!-- EditBook component with a listener for updating a book -->
             <EditBook :book="book" />
             <!-- DeleteBook component with a listener for deleting a book -->
-            <DeleteBook :book-id="book.id" />
+            <DeleteBook :book="book" />
         </div>
     </div>
 

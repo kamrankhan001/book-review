@@ -1,9 +1,9 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
-
 import { ref, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { initModals, Modal } from 'flowbite';
+import { toast } from 'vue3-toastify';
 
 // Props to accept the book data
 const props = defineProps({
@@ -41,35 +41,28 @@ const handleImageChange = (event) => {
     }
 };
 
-const showModal = () => {
-    const modalElement = document.getElementById('edit-modal');
+const showModal = (id) => {
+    const modalElement = document.getElementById(`edit-modal-${id}`);
     const modal = new Modal(modalElement);
     modal.show();
 };
 
-const hideModal = () => {
-    const modalElement = document.getElementById('edit-modal');
+const hideModal = (id) => {
+    const modalElement = document.getElementById(`edit-modal-${id}`);
     const modal = new Modal(modalElement);
     modal.hide();
 };
 
 // Function to submit the form
-const submitForm = () => {
+const submitForm = (id) => {
     form.post(route('books.update', props.book.id), {
         preserveScroll: true,
         onSuccess: () => {
-            // Reset the form and image preview after successful submission
-            form.reset();
-            document.getElementById('cover_image').value = '';
-            coverImagePreview.value = null;
-
-            hideModal()
-
-            alert(usePage().props.flash.message);
+            hideModal(id);
+            toast.success(usePage().props.flash.message);
         },
         onError: (error) => {
             console.log(error);
-            // alert('An error occurred. Please try again.');
         },
     });
 };
@@ -77,13 +70,14 @@ const submitForm = () => {
 
 <template>
     <!-- Modal toggle -->
-    <button data-modal-target="edit-modal" data-modal-toggle="edit-modal" @click="showModal"
+    <button :data-modal-target="`edit-modal-${book.id}`" :data-modal-toggle="`edit-modal-${book.id}`"
+        @click="() => showModal(book.id)"
         class="px-3 py-1 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 mb-2" type="button">
         Edit
     </button>
 
     <!-- Main modal -->
-    <div id="edit-modal" tabindex="-1" aria-hidden="true"
+    <div :id="`edit-modal-${book.id}`" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-lg max-h-full">
             <!-- Modal content -->
@@ -94,9 +88,9 @@ const submitForm = () => {
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                         Edit Book
                     </h3>
-                    <button type="button" @click="hideModal"
+                    <button type="button" @click="() => hideModal(book.id)"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="edit-modal">
+                        :data-modal-toggle="`edit-modal-${book.id}`">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -106,7 +100,7 @@ const submitForm = () => {
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form @submit.prevent="submitForm" class="p-4 md:p-5">
+                <form @submit.prevent="() => submitForm(book.id)" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Book
@@ -114,8 +108,7 @@ const submitForm = () => {
                             <input type="text" v-model="form.title" id="title"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Enter book title" required>
-                                <InputError class="mt-2" :message="form.errors.title" />
-
+                            <InputError class="mt-2" :message="form.errors.title" />
                         </div>
                         <div class="col-span-2">
                             <label for="author"
@@ -123,19 +116,19 @@ const submitForm = () => {
                             <input type="text" v-model="form.author" id="author"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Enter author name" required>
-                                <InputError class="mt-2" :message="form.errors.author" />
-
+                            <InputError class="mt-2" :message="form.errors.author" />
                         </div>
                         <div class="col-span-2">
                             <label for="cover_image"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Book Cover
                                 Image</label>
-                            <input type="file" @change="handleImageChange" id="cover_image"
+                            <input type="file" @change="handleImageChange" :id="`cover_image-${book.id}`"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 accept="image/*">
-                                <InputError class="mt-2" :message="form.errors.cover_image" />
-                            <img v-if="coverImagePreview" :src="'/storage/'+coverImagePreview" alt="Book Cover Preview"
-                                class="mt-2 w-32 h-32 object-cover rounded-lg">
+                            <InputError class="mt-2" :message="form.errors.cover_image" />
+                            <img v-if="coverImagePreview"
+                                :src="coverImagePreview.startsWith('data:') ? coverImagePreview : `/storage/${coverImagePreview}`"
+                                alt="Book Cover Preview" class="mt-2 w-32 h-32 object-cover rounded-lg">
                         </div>
                         <div class="col-span-2">
                             <label for="description"
@@ -143,8 +136,7 @@ const submitForm = () => {
                             <textarea v-model="form.description" id="description" rows="4"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Write book description here"></textarea>
-                                <InputError class="mt-2" :message="form.errors.description" />
-
+                            <InputError class="mt-2" :message="form.errors.description" />
                         </div>
                     </div>
                     <button type="submit"

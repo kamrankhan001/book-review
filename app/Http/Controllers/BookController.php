@@ -56,7 +56,7 @@ class BookController extends Controller
 
         $book->delete();
 
-        return redirect()->back()->with('success', 'Book deleted successfully.');
+        return redirect()->back()->with('message', 'Book deleted successfully.');
     }
 
 

@@ -1,12 +1,13 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { initModals, Modal } from 'flowbite';
+import { toast } from 'vue3-toastify';
 
-// Props to accept the book ID
+// Props to accept the book object
 const props = defineProps({
-    bookId: {
-        type: Number,
+    book: {
+        type: Object,
         required: true,
     },
 });
@@ -15,39 +16,50 @@ onMounted(() => {
     initModals();
 });
 
-
 // Use Inertia.js form for handling the delete request
 const form = useForm({});
 
 // Function to handle the delete action
 const deleteBook = () => {
-    form.delete(route('books.destroy', props.bookId), {
+    hideModal(props.book.id);
+    form.delete(route('books.destroy', props.book.id), {
         preserveScroll: true,
         onSuccess: () => {
-            document.getElementById('popup-modal-close').click();
-            alert('Book Deleted successfully');
-
-        }
+            toast.success(usePage().props.flash.message);
+        },
     });
+};
+
+const showModal = (id) => {
+    const modalElement = document.getElementById(`delete-book-modal-${id}`);
+    const modal = new Modal(modalElement);
+    modal.show();
+};
+
+const hideModal = (id) => {
+    const modalElement = document.getElementById(`delete-book-modal-${id}`);
+    const modal = new Modal(modalElement);
+    modal.hide();
 };
 </script>
 
 <template>
     <!-- Delete button -->
-    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
+    <button :data-modal-target="`delete-book-modal-${book.id}`" :data-modal-toggle="`delete-book-modal-${book.id}`"
+        @click="() => showModal(book.id)"
         class="px-3 py-1 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 mb-2" type="button">
         Delete
     </button>
 
     <!-- Delete confirmation modal -->
-    <div id="popup-modal" tabindex="-1"
+    <div :id="`delete-book-modal-${book.id}`" tabindex="-1"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                 <!-- Close button -->
                 <button type="button"
                     class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="popup-modal" id="popup-modal-close">
+                    @click="() => hideModal(book.id)">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -70,7 +82,7 @@ const deleteBook = () => {
                         Yes, I'm sure
                     </button>
                     <!-- Cancel button -->
-                    <button data-modal-hide="popup-modal" type="button"
+                    <button @click="() => hideModal(book.id)" type="button"
                         class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         No, cancel
                     </button>
