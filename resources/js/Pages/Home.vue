@@ -67,47 +67,53 @@ const generateStarRating = (rating) => {
         </form>
     </div>
 
-    <div class="max-w-screen-xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+    <div v-if="props.books.data.length > 0">
+        <div class="max-w-screen-xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
 
-        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-            v-for="book in props.books.data" :key="book.title">
-            <Link :href="route('book-review', book.id)">
-            <img class="rounded-t-lg w-full h-48 object-cover" :src="'/storage/' + book.cover_image" alt="Book Cover" />
-            </Link>
-            <div class="p-5">
-                <!-- Book Title -->
+            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+                v-for="book in props.books.data" :key="book.title">
                 <Link :href="route('book-review', book.id)">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.title }}
-                </h5>
+                <img class="rounded-t-lg w-full h-48 object-cover" :src="'/storage/' + book.cover_image" alt="Book Cover" />
                 </Link>
+                <div class="p-5">
+                    <!-- Book Title -->
+                    <Link :href="route('book-review', book.id)">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.title }}
+                    </h5>
+                    </Link>
 
-                <!-- Author Name -->
-                <p class="mb-2 text-sm text-gray-600 dark:text-gray-400">{{ book.author }}</p>
+                    <!-- Author Name -->
+                    <p class="mb-2 text-sm text-gray-600 dark:text-gray-400">{{ book.author }}</p>
 
-                <!-- Book Description -->
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {{ book.description }}
-                </p>
+                    <!-- Book Description -->
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        {{ book.description }}
+                    </p>
 
-                <!-- Five-Star Rating -->
-                <div class="flex items-center mb-4">
-                    <span class="text-yellow-500">{{ generateStarRating(book.reviews_avg_rating ?? 0) }}</span>
-                    <span class="ml-2 text-gray-700">{{ book.reviews_avg_rating ?? 0 }}/5</span>
+                    <!-- Five-Star Rating -->
+                    <div class="flex items-center mb-4">
+                        <span class="text-yellow-500">{{ generateStarRating(book.reviews_avg_rating ?? 0) }}</span>
+                        <span class="ml-2 text-gray-700">{{ book.reviews_avg_rating ?? 0 }}/5</span>
+                    </div>
+
+                    <!-- Read More Button -->
+                    <Link :href="route('book-review', book.id)"
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Read more
+                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                    </svg>
+                    </Link>
                 </div>
-
-                <!-- Read More Button -->
-                <Link :href="route('book-review', book.id)"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Read more
-                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
-                </Link>
             </div>
-        </div>
 
+        </div>
+    </div>
+
+    <div v-else class="max-w-screen-xl mx-auto p-4">
+        <p class="text-center text-gray-700 dark:text-gray-400">No books found.</p>
     </div>
 
     <!-- Pagination -->

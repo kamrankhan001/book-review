@@ -42,7 +42,7 @@ const submit = () => {
                 </div>
                 <div class="w-full p-8 lg:w-1/2">
                     <div class="text-center text-gray-600 font-bold text-lg mb-4">Sign In</div>
-                    <a href="#"
+                    <a :href="route('auth.google')"
                         class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100">
                         <div class="px-4 py-3">
                             <svg class="h-6 w-6" viewBox="0 0 40 40">

@@ -4,6 +4,8 @@ import InputError from '@/Components/InputError.vue';
 import { ref, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { initModals, Modal } from 'flowbite';
+import { toast } from 'vue3-toastify';
+
 
 onMounted(() => {
     initModals();
@@ -58,7 +60,7 @@ const submitForm = () => {
 
             hideModal()
 
-            alert(usePage().props.flash.message);
+            toast.success(usePage().props.flash.message);
 
         },
     });

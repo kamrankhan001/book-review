@@ -66,6 +66,10 @@ const searchBook = () => {
     </div>
 
     <!-- Loop through the books and render each one -->
+    <div v-if="books.data.length === 0" class="text-center text-gray-500 dark:text-gray-400 py-5 border mb-2">
+        No books found.
+    </div>
+    
     <div v-for="book in books.data" :key="book.id" class="space-y-4 border mb-2">
         <div class="flex px-4 bg-white dark:bg-gray-900">
             <img :src="'/storage/' + book.cover_image" alt="Book Cover" class="w-24 h-32 object-cover rounded-lg">

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{HomeController,DashboardController,ProfileController, BookController,ReviewController};
+use App\Http\Controllers\Auth\GoogleController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -25,5 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('auth/google/redirect', [GoogleController::class, 'googleRedirect'])->name('auth.google');
+
+Route::get('auth/google/callback', [GoogleController::class, 'googleCallback']);
 
 require __DIR__ . '/auth.php';
