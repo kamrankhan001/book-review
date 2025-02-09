@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ReviewRequest;
-use App\Models\{Book, Review};
+use App\Models\Book;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $books = Book::where(function ($query) use ($request) {
-            $query->where('title', 'like', '%' . $request->search . '%')->orWhere('author', 'like', '%' . $request->search . '%');
-        })
+        $books = Book::withAvg('reviews', 'rating')
+            ->selectRaw('*, ROUND((SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id), 1) AS reviews_avg_rating')
+            ->where(function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->search . '%')->orWhere('author', 'like', '%' . $request->search . '%');
+            })
             ->latest()
             ->paginate(9)
             ->withQueryString();
@@ -34,5 +35,4 @@ class HomeController extends Controller
             ]),
         ]);
     }
-
 }

@@ -11,12 +11,11 @@ Route::get('/book/review/{book}', [HomeController::class, 'review'])->name('book
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::post('/book/review/store', [ReviewController::class, 'store'])->name('book-review.store');
     Route::put('/book/review/edit/{review}', [ReviewController::class, 'update'])->name('book-review.update');
     Route::delete('/book/review/edit/{review}', [ReviewController::class, 'destroy'])->name('book-review.destroy');
-
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::post('/books/{book}', [BookController::class, 'update'])->name('books.update');
