@@ -42,7 +42,11 @@ const submitForm = () => {
             // Reset the form after successful submission
             form.reset();
             hideModal();
-            toast.success(usePage().props.flash.message);
+            if(usePage().props.flash.message == 'yes'){
+                toast.error("you are already reviewed this book");
+            }else{
+                toast.success(usePage().props.flash.message);
+            }
         },
     });
 };

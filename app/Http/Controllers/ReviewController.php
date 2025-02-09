@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ReviewRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Review;
-
 
 class ReviewController extends Controller
 {
     public function store(ReviewRequest $request)
     {
-        $validatedData = $request->validated();
+        if (Review::isReviewExists($request->user_id, $request->book_id)) {
+            return redirect()->back()->with('message', 'yes');
+        }
 
-        Review::create($validatedData);
+        Review::create($request->validated());
 
         return redirect()->back()->with('message', 'Review added successfully');
     }
@@ -31,7 +31,7 @@ class ReviewController extends Controller
     public function destroy(Review $review)
     {
         Gate::authorize(ability: 'delete', arguments: $review);
-        
+
         $review->delete();
 
         return redirect()->back()->with('message', 'Review deleted successfully');

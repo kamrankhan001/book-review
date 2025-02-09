@@ -32,4 +32,9 @@ class Review extends Model
             get: fn ($value) => Carbon::parse($value)->format('D m, Y'),
         );
     }
+
+    public static function isReviewExists($user_id, $book_id)
+    {
+        return self::where('user_id', $user_id)->where('book_id', $book_id)->exists();
+    }
 }
