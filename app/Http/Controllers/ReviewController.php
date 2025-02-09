@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ReviewRequest;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Review;
 
 
@@ -14,6 +15,7 @@ class ReviewController extends Controller
         $validatedData = $request->validated();
 
         Review::create($validatedData);
+
         return redirect()->back()->with('message', 'Review added successfully');
     }
 
@@ -22,12 +24,16 @@ class ReviewController extends Controller
         $validatedData = $request->validated();
 
         $review->update($validatedData);
+
         return redirect()->back()->with('message', 'Review updated successfully');
     }
 
     public function destroy(Review $review)
     {
+        Gate::authorize(ability: 'delete', arguments: $review);
+        
         $review->delete();
+
         return redirect()->back()->with('message', 'Review deleted successfully');
     }
 }

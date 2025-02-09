@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Review;
+
 
 class ReviewRequest extends FormRequest
 {
@@ -11,7 +13,15 @@ class ReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $review = $this->route('review');
+
+        // If it's an update request
+        if ($review) {
+            return $this->user()->can('update', $review);
+        }
+
+        // If it's a create request
+        return $this->user()->can('create', Review::class);
     }
 
     /**
