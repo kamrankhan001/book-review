@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Book;
+use App\Models\{User, Book, Review};
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +14,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(50)->create()->each(function ($user) {
-            Book::factory(5)->create(['user_id' => $user->id]);
+            $books = Book::factory(5)->create(['user_id' => $user->id]);
+
+            // Each user reviews all their books
+            $books->each(function ($book) use ($user) {
+                Review::factory()->create([
+                    'user_id' => $user->id,
+                    'book_id' => $book->id,
+                ]);
+            });
         });
+
     }
 }
