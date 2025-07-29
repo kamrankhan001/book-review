@@ -34,7 +34,7 @@ class ReviewRequest extends FormRequest
         return [
             'book_id' => 'required|exists:books,id',
             'user_id' => 'required|exists:users,id',
-            'review' => 'required|string|max:2000',
+            'review' => 'required|string|max:2000|regex:/^[a-zA-Z0-9\s.,!?()\'"-]+$/',
             'rating' => 'required|numeric|between:1,5|regex:/^\d(\.\d)?$/',
         ];
     }

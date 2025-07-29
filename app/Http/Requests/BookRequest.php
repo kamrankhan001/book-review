@@ -22,10 +22,10 @@ class BookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
+            'title' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s.,!?()\'"-]+$/',
+            'author' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s.,!?()\'"-]+$/',
             'cover_image' => request()->routeIs('books.store') ? 'required|image|mimes:jpeg,png,jpg,gif|max:2048' : 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|regex:/^[a-zA-Z0-9\s.,!?()\'"\-@#&:;\/\[\]]*$/',
         ];
     }
 }
