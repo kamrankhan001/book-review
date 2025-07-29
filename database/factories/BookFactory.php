@@ -16,7 +16,7 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-        $bookCovers = ['book1.jpg', 'book2.jpg', 'book3.jpg', 'book4.jpg', 'book5.jpg', 'book6.jpg'];
+        $bookCovers = ['img1.webp', 'img2.webp', 'img3.webp', 'img4.webp'];
 
         return [
             'title' => $this->faker->sentence(3),

@@ -27,23 +27,22 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-
         <Head title="Log in" />
 
         <!-- Status Message -->
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <div v-if="status" class="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
             {{ status }}
         </div>
 
-
         <div class="py-16">
-            <div class="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
+            <div class="flex bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
                 <div class="hidden lg:block lg:w-1/2 bg-cover" style="background-image:url('/imgs/book1.jpg')">
                 </div>
                 <div class="w-full p-8 lg:w-1/2">
-                    <div class="text-center text-gray-600 font-bold text-lg mb-4">Sign In</div>
+                    <div class="text-center text-gray-600 dark:text-gray-200 font-bold text-lg mb-4">Sign In</div>
+                    
                     <a :href="route('auth.google')"
-                        class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100">
+                        class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <div class="px-4 py-3">
                             <svg class="h-6 w-6" viewBox="0 0 40 40">
                                 <path
@@ -60,74 +59,75 @@ const submit = () => {
                                     fill="#1976D2" />
                             </svg>
                         </div>
-                        <h1 class="px-4 py-3 w-5/6 text-center text-gray-600 font-bold">Sign in with Google</h1>
+                        <h1 class="px-4 py-3 w-5/6 text-center text-gray-600 dark:text-gray-200 font-bold">Sign in with Google</h1>
                     </a>
+
                     <div class="mt-4 flex items-center justify-between">
-                        <span class="border-b w-1/5 lg:w-1/4"></span>
-                        <a href="#" class="text-xs text-center text-gray-500 uppercase">or login with email</a>
-                        <span class="border-b w-1/5 lg:w-1/4"></span>
+                        <span class="border-b w-1/5 lg:w-1/4 dark:border-gray-600"></span>
+                        <a href="#" class="text-xs text-center text-gray-500 dark:text-gray-400 uppercase">or login with email</a>
+                        <span class="border-b w-1/5 lg:w-1/4 dark:border-gray-600"></span>
                     </div>
+
                     <form @submit.prevent="submit">
-                        <div class="mt-4">
-                            <!-- Email Field -->
-                            <div class="mb-5">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Your email
-                                </label>
-                                <input id="email" type="email" v-model="form.email" autofocus autocomplete="username"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required />
-                                <InputError class="mt-2" :message="form.errors.email" />
-                            </div>
+                        <!-- Email Field -->
+                        <div class="mt-4 mb-5">
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Your email
+                            </label>
+                            <input id="email" type="email" v-model="form.email" autofocus autocomplete="username"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            <InputError class="mt-2" :message="form.errors.email" />
                         </div>
-                        <div class="mt-4">
-                            <!-- Password Field -->
-                            <div class="mb-5">
-                                <label for="password"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Your password
-                                </label>
-                                <input id="password" type="password" v-model="form.password"
-                                    autocomplete="current-password"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required />
-                                <InputError class="mt-2" :message="form.errors.password" />
-                            </div>
+
+                        <!-- Password Field -->
+                        <div class="mt-4 mb-5">
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Your password
+                            </label>
+                            <input id="password" type="password" v-model="form.password" autocomplete="current-password"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full p-2.5"
+                                required />
+                            <InputError class="mt-2" :message="form.errors.password" />
                         </div>
+
+                        <!-- Submit Button -->
                         <div class="mt-8">
-                            <!-- Submit Button -->
                             <button type="submit"
-                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 :disabled="form.processing">
                                 Log in
                             </button>
                         </div>
-                        <!-- Remember Me Checkbox -->
+
+                        <!-- Remember Me & Forgot Password -->
                         <div class="flex items-center justify-between mt-5">
                             <div class="flex items-center">
                                 <input id="remember" type="checkbox" v-model="form.remember"
-                                    class="w-4 h-4 text-blue-600 border border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
+                                    class="w-4 h-4 text-blue-600 bg-gray-50 border border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" />
                                 <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                     Remember me
                                 </label>
                             </div>
-
-                            <!-- Forgot Password Link -->
                             <Link v-if="canResetPassword" :href="route('password.request')"
                                 class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500">
-                            Forgot your password?
+                                Forgot your password?
                             </Link>
                         </div>
+
+                        <!-- Sign Up Link -->
                         <div class="mt-4 flex items-center justify-between">
-                            <span class="border-b w-1/5 md:w-1/4"></span>
-                            <Link :href="route('register')" class="text-xs text-blue-600 hover:text-blue-800 uppercase">or sign up</Link>
-                            <span class="border-b w-1/5 md:w-1/4"></span>
+                            <span class="border-b w-1/5 md:w-1/4 dark:border-gray-600"></span>
+                            <Link :href="route('register')"
+                                class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500 uppercase">
+                                or sign up
+                            </Link>
+                            <span class="border-b w-1/5 md:w-1/4 dark:border-gray-600"></span>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-
     </GuestLayout>
 </template>
+

@@ -19,11 +19,11 @@ const updatePassword = () => {
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation');
-                passwordInput.value.focus();
+                passwordInput.value?.focus();
             }
             if (form.errors.current_password) {
                 form.reset('current_password');
-                currentPasswordInput.value.focus();
+                currentPasswordInput.value?.focus();
             }
         },
     });
@@ -33,54 +33,83 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
-            <p class="mt-1 text-sm text-gray-600">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-white">Update Password</h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
                 Ensure your account is using a long, random password to stay secure.
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+        <form @submit.prevent="updatePassword" class="mt-6">
+            <!-- Current Password -->
             <div class="mb-5">
                 <label for="current_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Current Password
                 </label>
-                <input id="current_password" ref="currentPasswordInput" v-model="form.current_password" type="password"
+                <input
+                    id="current_password"
+                    ref="currentPasswordInput"
+                    v-model="form.current_password"
+                    type="password"
+                    required
+                    autocomplete="current-password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    autocomplete="current-password" required />
+                />
                 <InputError :message="form.errors.current_password" class="mt-2" />
             </div>
 
+            <!-- New Password -->
             <div class="mb-5">
                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     New Password
                 </label>
-                <input id="password" ref="passwordInput" v-model="form.password" type="password"
+                <input
+                    id="password"
+                    ref="passwordInput"
+                    v-model="form.password"
+                    type="password"
+                    required
+                    autocomplete="new-password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    autocomplete="new-password" required />
+                />
                 <InputError :message="form.errors.password" class="mt-2" />
             </div>
 
+            <!-- Confirm Password -->
             <div class="mb-5">
                 <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Confirm Password
                 </label>
-                <input id="password_confirmation" v-model="form.password_confirmation" type="password"
+                <input
+                    id="password_confirmation"
+                    v-model="form.password_confirmation"
+                    type="password"
+                    required
+                    autocomplete="new-password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    autocomplete="new-password" required />
+                />
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
 
+            <!-- Submit -->
             <div class="mt-8">
-                <button type="submit"
+                <button
+                    type="submit"
+                    :disabled="form.processing"
                     class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    :disabled="form.processing">
+                >
                     Save
                 </button>
             </div>
 
+            <!-- Success Message -->
             <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0"
-                leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
-                <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
+                        leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
+                <p
+                    v-if="form.recentlySuccessful"
+                    class="text-sm text-gray-600 dark:text-gray-300 mt-4 text-center"
+                >
+                    Saved.
+                </p>
             </Transition>
         </form>
     </section>
