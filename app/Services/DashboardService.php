@@ -12,8 +12,8 @@ class DashboardService
             ->books()
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
-                    $q->where('title', 'like', '%' . $request->search . '%')
-                      ->orWhere('author', 'like', '%' . $request->search . '%');
+                    $q->where('title', 'like', '%'.$request->search.'%')
+                        ->orWhere('author', 'like', '%'.$request->search.'%');
                 });
             })
             ->latest()

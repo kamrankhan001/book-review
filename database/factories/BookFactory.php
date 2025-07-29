@@ -21,7 +21,7 @@ class BookFactory extends Factory
         return [
             'title' => $this->faker->sentence(3),
             'author' => $this->faker->name,
-            'cover_image' => 'books/covers/' . $bookCovers[array_rand($bookCovers)],
+            'cover_image' => 'books/covers/'.$bookCovers[array_rand($bookCovers)],
             'description' => $this->faker->words(15, true),
             'user_id' => \App\Models\User::factory(),
         ];

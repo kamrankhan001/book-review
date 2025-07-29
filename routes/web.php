@@ -1,14 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{HomeController,DashboardController,ProfileController, BookController,ReviewController};
 use App\Http\Controllers\Auth\GoogleController;
-
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/book/review/{book}', [HomeController::class, 'review'])->name('book-review');
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -31,4 +33,4 @@ Route::get('auth/google/redirect', [GoogleController::class, 'googleRedirect'])-
 
 Route::get('auth/google/callback', [GoogleController::class, 'googleCallback']);
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

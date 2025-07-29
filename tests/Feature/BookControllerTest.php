@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +23,7 @@ it('stores a new book with image', function () {
 
     $response->assertRedirect();
     expect(Book::first())->title->toBe('Test Book');
-    Storage::disk('public')->assertExists('books/covers/' . $file->hashName());
+    Storage::disk('public')->assertExists('books/covers/'.$file->hashName());
 });
 
 it('updates an existing book', function () {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetFilteredBooksAction;
 use App\Models\Book;
 use Illuminate\Http\Request;
-use App\Actions\GetFilteredBooksAction;
 
 class HomeController extends Controller
 {

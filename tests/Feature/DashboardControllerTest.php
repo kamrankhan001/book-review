@@ -10,9 +10,8 @@ it('shows user dashboard with books and reviews', function () {
     $response = $this->get(route('dashboard'));
 
     $response->assertOk();
-    $response->assertInertia(fn ($page) => 
-        $page->component('Dashboard')
-             ->has('books.data', 2)
-             ->has('reviews', 2)
+    $response->assertInertia(fn ($page) => $page->component('Dashboard')
+        ->has('books.data', 2)
+        ->has('reviews', 2)
     );
 });

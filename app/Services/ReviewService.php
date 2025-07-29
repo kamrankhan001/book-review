@@ -13,6 +13,7 @@ class ReviewService
         }
 
         Review::create($data);
+
         return true;
     }
 

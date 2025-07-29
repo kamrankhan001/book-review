@@ -29,6 +29,7 @@ class BookService
         }
 
         $book->update($data);
+
         return $book;
     }
 

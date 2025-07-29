@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\User;
 use App\Models\Book;
 use App\Models\Review;
+use App\Models\User;
 
 it('stores a review', function () {
     $user = User::factory()->create();
