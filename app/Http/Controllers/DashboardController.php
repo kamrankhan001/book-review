@@ -3,31 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\DashboardService;
 
 class DashboardController extends Controller
 {
+    protected DashboardService $dashboardService;
+
+    public function __construct(DashboardService $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
+    }
+
     public function index(Request $request)
     {
-        $books = auth()
-            ->user()
-            ->books()
-            ->where(function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')->orWhere('author', 'like', '%' . $request->search . '%');
-            })
-            ->latest()
-            ->paginate(5)
-            ->withQueryString(); // Ensures pagination works with search
-
-        $reviews = auth()
-            ->user()
-            ->reviews()
-            ->latest()
-            ->get();
-
         return inertia('Dashboard', [
-            'books' => $books,
-            'filters' => $request->only('search'), // Pass search input to Vue
-            'reviews' => $reviews->load('book'),
+            'books' => $this->dashboardService->getUserBooks($request),
+            'reviews' => $this->dashboardService->getUserReviews(),
+            'filters' => $request->only('search'),
         ]);
     }
 }

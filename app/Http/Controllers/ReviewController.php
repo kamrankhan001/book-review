@@ -3,37 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReviewRequest;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Review;
+use App\Services\ReviewService;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
+    protected ReviewService $reviewService;
+
+    public function __construct(ReviewService $reviewService)
+    {
+        $this->reviewService = $reviewService;
+    }
+
     public function store(ReviewRequest $request)
     {
-        if (Review::isReviewExists($request->user_id, $request->book_id)) {
-            return redirect()->back()->with('message', 'yes');
+        $result = $this->reviewService->create($request->validated());
+
+        if ($result === 'already_exists') {
+            return redirect()->back()->with('message', 'You already submitted a review for this book.');
         }
 
-        Review::create($request->validated());
-
-        return redirect()->back()->with('message', 'Review added successfully');
+        return redirect()->back()->with('message', 'Review added successfully.');
     }
 
     public function update(ReviewRequest $request, Review $review)
     {
-        $validatedData = $request->validated();
+        $this->reviewService->update($review, $request->validated());
 
-        $review->update($validatedData);
-
-        return redirect()->back()->with('message', 'Review updated successfully');
+        return redirect()->back()->with('message', 'Review updated successfully.');
     }
 
     public function destroy(Review $review)
     {
-        Gate::authorize(ability: 'delete', arguments: $review);
+        Gate::authorize('delete', $review);
 
-        $review->delete();
+        $this->reviewService->delete($review);
 
-        return redirect()->back()->with('message', 'Review deleted successfully');
+        return redirect()->back()->with('message', 'Review deleted successfully.');
     }
 }

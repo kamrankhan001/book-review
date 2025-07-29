@@ -4,63 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Models\Book;
-use Illuminate\Support\Facades\Storage;
+use App\Services\BookService;
 use Illuminate\Support\Facades\Gate;
 
 class BookController extends Controller
 {
+    protected BookService $bookService;
+
+    public function __construct(BookService $bookService)
+    {
+        $this->bookService = $bookService;
+    }
+
     public function store(BookRequest $request)
     {
-        $validatedData = $request->validated();
-        $validatedData['user_id'] = auth()->id(); // Assign book to logged-in user
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
 
-        // Handle image upload
-        if ($request->hasFile('cover_image')) {
-            $validatedData['cover_image'] = $this->handleImageUpload($request->file('cover_image'));
-        }
+        $this->bookService->store($data, $request->file('cover_image'));
 
-        $newBook = Book::create($validatedData);
-
-        return redirect()->back()->with(key: 'message', value: 'Book created successfully!',);
+        return redirect()->back()->with('message', 'Book created successfully!');
     }
 
     public function update(BookRequest $request, Book $book)
     {
-        Gate::authorize(ability: 'update', arguments: $book);
+        Gate::authorize('update', $book);
 
-        $validatedData = $request->validated();
+        $data = $request->validated();
 
-        // Handle image upload
-        if ($request->hasFile('cover_image')) {
-            if ($book->cover_image) {
-                Storage::delete(paths: $book->cover_image); // Delete old image
-            }
-            $validatedData['cover_image'] = $this->handleImageUpload($request->file(key: 'cover_image'));
-        }else{
-            $validatedData['cover_image'] = $book->cover_image;
-        }
+        $this->bookService->update($book, $data, $request->file('cover_image'));
 
-        $book->update($validatedData);
-
-        return redirect()->back()->with(key: 'message', value: 'Book updated successfully.');
+        return redirect()->back()->with('message', 'Book updated successfully.');
     }
 
     public function destroy(Book $book)
     {
-        Gate::authorize(ability: 'delete', arguments: $book);
+        Gate::authorize('delete', $book);
 
-        if ($book->cover_image) {
-            Storage::delete($book->cover_image); // Delete the cover image
-        }
-
-        $book->delete();
+        $this->bookService->delete($book);
 
         return redirect()->back()->with('message', 'Book deleted successfully.');
-    }
-
-
-    private function handleImageUpload($image)
-    {
-        return $image->store('books/covers', 'public'); // Save in storage/app/public/books/covers
     }
 }

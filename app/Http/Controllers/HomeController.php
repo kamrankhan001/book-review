@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Http\Request;
+use App\Actions\GetFilteredBooksAction;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GetFilteredBooksAction $getFilteredBooks)
     {
-        $books = Book::withAvg('reviews', 'rating')
-            ->selectRaw('*, ROUND((SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id), 1) AS reviews_avg_rating')
-            ->where(function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->search . '%')->orWhere('author', 'like', '%' . $request->search . '%');
-            })
-            ->latest()
-            ->paginate(9)
-            ->withQueryString();
+        $books = $getFilteredBooks($request);
 
         return inertia('Home', [
             'books' => $books,
@@ -26,13 +20,13 @@ class HomeController extends Controller
 
     public function review(Book $book)
     {
+        $book->load([
+            'reviews' => fn ($query) => $query->latest(),
+            'reviews.user',
+        ]);
+
         return inertia('Review', [
-            'book' => $book->load([
-                'reviews' => function ($query) {
-                    $query->latest();
-                },
-                'reviews.user',
-            ]),
+            'book' => $book,
         ]);
     }
 }
