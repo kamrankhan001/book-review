@@ -76,7 +76,7 @@ const generateStarRating = (rating) => {
                     >
                         <!-- Rating Badge -->
                         <div class="absolute top-3 right-3 z-10 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full shadow">
-                            {{ book.reviews_avg_rating ? book.reviews_avg_rating.toFixed(1) : '0.0' }}/5
+                            {{ typeof book.reviews_avg_rating === 'number' ? book.reviews_avg_rating.toFixed(1) : '0.0' }}/5
                         </div>
 
                         <!-- Book Cover -->

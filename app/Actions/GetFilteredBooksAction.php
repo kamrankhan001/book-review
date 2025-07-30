@@ -11,8 +11,7 @@ class GetFilteredBooksAction
     {
         $search = $request->input('search');
 
-        return Book::withAvg('reviews', 'rating')
-            ->selectRaw('*, ROUND((SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id), 1) AS reviews_avg_rating')
+        return Book::selectRaw('books.*, ROUND((SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id), 1) AS reviews_avg_rating')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
