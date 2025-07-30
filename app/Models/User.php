@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(related: Review::class);
     }
+
+    public function isDemoUser(): bool
+    {
+        return $this->email === 'demouser@kamrankhan.dev';
+    }
 }

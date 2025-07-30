@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Call seeder
+        $this->call(DemoUserSeeder::class);
+
+
         User::factory(5)->create()->each(function ($user) {
             $books = Book::factory(5)->create(['user_id' => $user->id]);
 
