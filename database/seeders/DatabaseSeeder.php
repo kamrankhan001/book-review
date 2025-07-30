@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(50)->create()->each(function ($user) {
+        User::factory(5)->create()->each(function ($user) {
             $books = Book::factory(5)->create(['user_id' => $user->id]);
 
             // Each user reviews all their books

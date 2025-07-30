@@ -8,6 +8,6 @@ Schedule::call(function () {
         '--seed' => true,
         '--force' => true // required to run in production
     ]);
-})->name('migrate_fresh_seed')
+})->name('book_review_migrate_fresh_seed')
     ->withoutOverlapping()
     ->daily();

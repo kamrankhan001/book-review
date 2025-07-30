@@ -1,3 +1,5 @@
+![Task Manager Screenshot](./public/screenshot.webp)
+
 # Book Review Application
 
 ## Features
